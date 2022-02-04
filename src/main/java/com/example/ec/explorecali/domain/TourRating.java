@@ -72,6 +72,10 @@ public class TourRating {
         }
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public Integer getScore() {
         return score;
     }
