@@ -15,6 +15,8 @@
 	<description>Explore California Microservice</description>
 	<properties>
 		<java.version>17</java.version>
+		<!--	Use it to declare the profile we want to use	-->
+		<ec-profile>default</ec-profile>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -82,6 +84,27 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>1.2.2</version>
+				<configuration>
+					<imageName>explorecali-${ec-profile}</imageName>
+					<baseImage>openjdk:13</baseImage>
+					<entryPoint>["java", "-Dspring.profiles.active=${ec-profile}", "-jar", "${project.build.finalName}.jar"]</entryPoint>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+					<forceTags>true</forceTags>
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
